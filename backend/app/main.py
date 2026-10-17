@@ -1,7 +1,6 @@
 ﻿from fastapi import FastAPI
 from app.database import Base, engine, SessionLocal
 
-# IMPORT CRITIQUE : enregistre les modèles dans Base.metadata AVANT create_all
 from app import models  # noqa: F401
 from app.models import Bookmaker
 
@@ -10,8 +9,9 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="BetTracker API", version="0.1.0")
 
 # Inclusion des routers
-from app.routers import coupons
+from app.routers import coupons, redirect
 app.include_router(coupons.router)
+app.include_router(redirect.router)
 
 @app.on_event("startup")
 def seed_bookmakers():
