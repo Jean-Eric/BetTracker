@@ -9,10 +9,9 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="BetTracker API", version="0.1.0")
 
-# --- AJOUT DU CORS ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # En prod, on mettra http://localhost:5173
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
