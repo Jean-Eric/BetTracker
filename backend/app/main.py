@@ -9,9 +9,10 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="BetTracker API", version="0.1.0")
 
 # Inclusion des routers
-from app.routers import coupons, redirect
+from app.routers import coupons, redirect, stats
 app.include_router(coupons.router)
 app.include_router(redirect.router)
+app.include_router(stats.router)
 
 @app.on_event("startup")
 def seed_bookmakers():
