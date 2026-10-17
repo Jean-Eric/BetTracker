@@ -1,4 +1,5 @@
 ﻿from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine, SessionLocal
 
 from app import models  # noqa: F401
@@ -7,6 +8,15 @@ from app.models import Bookmaker
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="BetTracker API", version="0.1.0")
+
+# --- AJOUT DU CORS ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # En prod, on mettra http://localhost:5173
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Inclusion des routers
 from app.routers import coupons, redirect, stats
