@@ -7,8 +7,10 @@ from app.models import Bookmaker
 
 Base.metadata.create_all(bind=engine)
 
+# 1. On crée l'application d'abord
 app = FastAPI(title="BetTracker API", version="0.1.0")
 
+# 2. On ajoute le CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,13 +19,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Inclusion des routers
-from app.routers import coupons, redirect, stats, matches
+# 3. On importe et on inclut les routers
+from app.routers import coupons, redirect, stats, matches, predictions, analyses
 app.include_router(coupons.router)
 app.include_router(redirect.router)
 app.include_router(stats.router)
 app.include_router(matches.router)
+app.include_router(predictions.router)
+app.include_router(analyses.router)
 
+# 4. On ajoute l'événement de démarrage
 @app.on_event("startup")
 def seed_bookmakers():
     db = SessionLocal()
@@ -41,6 +46,7 @@ def seed_bookmakers():
     finally:
         db.close()
 
+# 5. La route de santé
 @app.get("/health")
 def health():
     return {"status": "ok"}

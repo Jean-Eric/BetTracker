@@ -2,9 +2,11 @@
 from app.models.bookmaker import Bookmaker
 from app.models.coupon import Coupon, Selection
 from app.models.football import Team, League, Match
+from app.models.analysis import Analysis
 
 __all__ = [
     "CouponStatus", "BetResult", 
     "Bookmaker", "Coupon", "Selection",
-    "Team", "League", "Match"
+    "Team", "League", "Match",
+    "Analysis"
 ]

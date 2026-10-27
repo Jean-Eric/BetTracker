@@ -22,6 +22,14 @@ class ResolveBet(BaseModel):
     result: BetResult
     actual_gain: Optional[float] = Field(None, ge=0)
 
+class AnalysisCreate(BaseModel):
+    match_id: int
+    prediction_type: str
+    prediction_value: str
+    odds_at_analysis: Optional[float] = None
+    reasoning: Optional[str] = None
+    confidence: int = Field(3, ge=1, le=5)
+
 # === Sorties ===
 class SelectionOut(BaseModel):
     id: int
@@ -65,7 +73,6 @@ class BookmakerOut(BaseModel):
     class Config:
         from_attributes = True
 
-# === Schémas Football (V2) ===
 class TeamOut(BaseModel):
     id: int
     name: str
@@ -85,10 +92,25 @@ class MatchOut(BaseModel):
     id: int
     match_date: datetime
     status: str
+    elapsed: Optional[int] = None
     home_goals: Optional[int] = None
     away_goals: Optional[int] = None
     home_team: TeamOut
     away_team: TeamOut
     league: Optional[LeagueOut] = None
+    class Config:
+        from_attributes = True
+
+class AnalysisOut(BaseModel):
+    id: int
+    match_id: int
+    prediction_type: str
+    prediction_value: str
+    odds_at_analysis: Optional[float]
+    reasoning: Optional[str]
+    confidence: int
+    status: str # <-- AJOUTÉ ICI
+    created_at: datetime
+    match: MatchOut
     class Config:
         from_attributes = True

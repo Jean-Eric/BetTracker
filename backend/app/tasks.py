@@ -12,6 +12,7 @@ def sync_today_matches():
     try:
         matches_data = get_today_matches()
         count_added = 0
+        count_updated = 0
 
         for m in matches_data:
             # 1. Sauvegarder la Ligue
@@ -43,12 +44,11 @@ def sync_today_matches():
                 db.add(away_team)
                 db.flush()
 
-            # 3. Sauvegarder le Match
+            # 3. Sauvegarder ou Mettre à jour le Match
             match = db.query(Match).filter_by(id=m['fixture']['id']).first()
+            
             if not match:
-                # Conversion de la date ISO 8601 de l'API vers datetime
                 match_date = datetime.fromisoformat(m['fixture']['date'].replace("Z", "+00:00"))
-                
                 match = Match(
                     id=m['fixture']['id'],
                     league_id=league.id,
@@ -56,15 +56,23 @@ def sync_today_matches():
                     away_team_id=away_team.id,
                     match_date=match_date,
                     status=m['fixture']['status']['short'],
+                    elapsed=m['fixture']['status']['elapsed'],
                     home_goals=m['goals']['home'],
                     away_goals=m['goals']['away']
                 )
                 db.add(match)
                 count_added += 1
+            else:
+                # Mise à jour des données en direct (score, temps de jeu)
+                match.status = m['fixture']['status']['short']
+                match.elapsed = m['fixture']['status']['elapsed']
+                match.home_goals = m['goals']['home']
+                match.away_goals = m['goals']['away']
+                count_updated += 1
 
         db.commit()
-        print(f"Synchronisation terminée. {count_added} nouveaux matchs ajoutés.")
-        return f"{count_added} matchs ajoutés"
+        print(f"Synchronisation terminée. {count_added} ajoutés, {count_updated} mis à jour.")
+        return f"{count_added} ajoutés, {count_updated} mis à jour"
     except Exception as e:
         db.rollback()
         print(f"Erreur lors de la synchronisation : {e}")

@@ -32,6 +32,7 @@ class Match(Base):
     
     match_date = Column(DateTime(timezone=True), nullable=False)
     status = Column(String, default="NS") # NS = Not Started, FT = Full Time, etc.
+    elapsed = Column(Integer, nullable=True) # Temps de jeu (ex: 45)
     
     home_goals = Column(Integer, nullable=True)
     away_goals = Column(Integer, nullable=True)
