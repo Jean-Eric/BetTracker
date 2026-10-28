@@ -4,9 +4,7 @@ import { api } from '../api/client';
 export default function NewCoupon() {
   const [bookmaker, setBookmaker] = useState('Betclic');
   const [stake, setStake] = useState('10');
-  const [selections, setSelections] = useState([
-    { event_name: '', market: '', pick: '', odds: '' }
-  ]);
+  const [selections, setSelections] = useState([{ event_name: '', market: '', pick: '', odds: '' }]);
   const [result, setResult] = useState<any>(null);
 
   const handleAddSelection = () => {
@@ -42,16 +40,14 @@ export default function NewCoupon() {
 
   if (result) {
     return (
-      <div style={{ padding: '1rem', maxWidth: '500px', margin: '0 auto' }}>
+      <div className="card" style={{ maxWidth: '500px', margin: '2rem auto', textAlign: 'center' }}>
         <h2>✅ Coupon généré !</h2>
-        <p><strong>Cote totale :</strong> {result.total_odds}</p>
-        <p><strong>Gain potentiel :</strong> {result.potential_gain} €</p>
-        <p>Ouvrez ce lien sur votre téléphone ou cliquez dessus :</p>
-        <a href={result.tracking_url} target="_blank" rel="noreferrer" 
-           style={{ display: 'block', background: '#2563eb', color: 'white', padding: '1rem', textAlign: 'center', borderRadius: '8px', textDecoration: 'none', marginTop: '1rem' }}>
+        <p style={{ fontSize: '1.1rem', margin: '1rem 0' }}><strong>Cote totale :</strong> <span style={{ color: '#2563eb', fontWeight: 'bold' }}>{result.total_odds}</span></p>
+        <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}><strong>Gain potentiel :</strong> <span style={{ color: '#10b981', fontWeight: 'bold' }}>{result.potential_gain} €</span></p>
+        <a href={result.tracking_url} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ display: 'block', marginBottom: '1rem', padding: '1rem' }}>
           🔗 Ouvrir le coupon
         </a>
-        <button onClick={() => setResult(null)} style={{ marginTop: '1rem', width: '100%', padding: '1rem' }}>
+        <button onClick={() => setResult(null)} className="btn btn-outline" style={{ width: '100%', padding: '1rem' }}>
           Créer un autre coupon
         </button>
       </div>
@@ -59,40 +55,47 @@ export default function NewCoupon() {
   }
 
   return (
-    <div style={{ padding: '1rem', maxWidth: '500px', margin: '0 auto', fontFamily: 'system-ui' }}>
-      <h2>Nouveau Coupon</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <h1>Nouveau Coupon</h1>
+        <p className="text-muted">Construisez votre pari combiné</p>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ flex: 1 }}>
+            <label>Bookmaker</label>
+            <select value={bookmaker} onChange={e => setBookmaker(e.target.value)}>
+              <option>Betclic</option>
+              <option>1xbet</option>
+              <option>Melbet</option>
+              <option>Paripesa</option>
+            </select>
+          </div>
+          <div style={{ flex: 1 }}>
+            <label>Mise (€)</label>
+            <input type="number" value={stake} onChange={e => setStake(e.target.value)} />
+          </div>
+        </div>
+
+        <h3 style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.5rem' }}>Sélections</h3>
         
-        <div>
-          <label>Bookmaker</label>
-          <select value={bookmaker} onChange={e => setBookmaker(e.target.value)} style={{ width: '100%', padding: '0.5rem' }}>
-            <option>Betclic</option>
-            <option>1xbet</option>
-            <option>Melbet</option>
-            <option>Paripesa</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Mise (€)</label>
-          <input type="number" value={stake} onChange={e => setStake(e.target.value)} style={{ width: '100%', padding: '0.5rem' }} />
-        </div>
-
-        <h3>Sélections</h3>
         {selections.map((sel, index) => (
-          <div key={index} style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '8px' }}>
-            <input placeholder="Événement (ex: PSG vs OM)" value={sel.event_name} onChange={e => handleChange(index, 'event_name', e.target.value)} style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }} required />
-            <input placeholder="Marché (ex: 1X2)" value={sel.market} onChange={e => handleChange(index, 'market', e.target.value)} style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }} required />
-            <input placeholder="Pronostic (ex: PSG)" value={sel.pick} onChange={e => handleChange(index, 'pick', e.target.value)} style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }} required />
-            <input type="number" step="0.01" placeholder="Cote (ex: 1.85)" value={sel.odds} onChange={e => handleChange(index, 'odds', e.target.value)} style={{ width: '100%', padding: '0.5rem' }} required />
+          <div key={index} style={{ background: '#f8fafc', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <input placeholder="Événement (ex: PSG vs OM)" value={sel.event_name} onChange={e => handleChange(index, 'event_name', e.target.value)} style={{ marginBottom: '0.5rem' }} required />
+            <input placeholder="Marché (ex: 1X2)" value={sel.market} onChange={e => handleChange(index, 'market', e.target.value)} style={{ marginBottom: '0.5rem' }} required />
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <input placeholder="Pronostic (ex: PSG)" value={sel.pick} onChange={e => handleChange(index, 'pick', e.target.value)} style={{ flex: 2 }} required />
+              <input type="number" step="0.01" placeholder="Cote" value={sel.odds} onChange={e => handleChange(index, 'odds', e.target.value)} style={{ flex: 1 }} required />
+            </div>
           </div>
         ))}
         
-        <button type="button" onClick={handleAddSelection} style={{ padding: '0.5rem' }}>
+        <button type="button" onClick={handleAddSelection} className="btn btn-outline">
           + Ajouter une sélection
         </button>
 
-        <button type="submit" style={{ padding: '1rem', background: '#16a34a', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1rem', marginTop: '1rem' }}>
+        <button type="submit" className="btn btn-primary" style={{ padding: '1rem', fontSize: '1.1rem' }}>
           Générer le coupon
         </button>
       </form>

@@ -30,6 +30,11 @@ class AnalysisCreate(BaseModel):
     reasoning: Optional[str] = None
     confidence: int = Field(3, ge=1, le=5)
 
+class AdCreate(BaseModel):
+    title: str
+    content: str
+    color: str = "#3b82f6"
+
 # === Sorties ===
 class SelectionOut(BaseModel):
     id: int
@@ -109,8 +114,17 @@ class AnalysisOut(BaseModel):
     odds_at_analysis: Optional[float]
     reasoning: Optional[str]
     confidence: int
-    status: str # <-- AJOUTÉ ICI
+    status: str
     created_at: datetime
     match: MatchOut
+    class Config:
+        from_attributes = True
+
+class AdOut(BaseModel):
+    id: int
+    title: str
+    content: str
+    color: str
+    is_active: bool
     class Config:
         from_attributes = True

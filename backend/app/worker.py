@@ -10,10 +10,13 @@ celery_app = Celery(
 
 celery_app.conf.timezone = "Europe/Paris"
 
-# Planification des tâches
 celery_app.conf.beat_schedule = {
-    'sync-matches-every-hour': {
+    'sync-matches-every-5-min': {
         'task': 'app.tasks.sync_today_matches',
-        'schedule': 3600.0, # Toutes les heures (3600 secondes)
+        'schedule': 300.0,
+    },
+    'resolve-predictions-every-10-min': {
+        'task': 'app.tasks.resolve_predictions',
+        'schedule': 600.0,
     },
 }

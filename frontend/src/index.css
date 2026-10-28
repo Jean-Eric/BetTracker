@@ -1,111 +1,241 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #eff6ff;
+  --bg-color: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --card-bg: rgba(255, 255, 255, 0.95);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+* {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  /* Image de fond stade de foot floutée + overlay sombre */
+  background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
+              url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+  background-size: cover;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Layout principal */
+.app-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem 1rem;
+}
+
+/* Cartes génériques (verre dépoli) */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 1) !important;
+}
+
+/* Bannière d'accueil */
+.hero-banner {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(29, 78, 216, 0.8) 100%);
+  backdrop-filter: blur(5px);
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-banner h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  letter-spacing: -0.02em;
+}
+
+.hero-banner p {
+  font-size: 1.15rem;
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+/* Ruban défilant (Marquee) - Vitesse ralentie à 45s */
+.marquee-container {
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  color: white;
+  padding: 0.6rem 0;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  white-space: nowrap;
+  display: flex;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marquee 45s linear infinite;
+  padding-left: 100%;
   font-weight: 500;
-  color: var(--text-h);
+  font-size: 0.95rem;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+.marquee-content span {
+  margin-right: 3rem;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+.marquee-content span::before {
+  content: '🔥';
+  margin-right: 0.5rem;
+}
+
+@keyframes marquee {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}
+
+/* Boutons */
+.btn {
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 6px 8px -1px rgba(37, 99, 235, 0.4);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.btn-outline:hover {
+  background: white;
+  border-color: var(--text-muted);
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-pending { background: #fef3c7; color: #92400e; }
+.badge-won { background: #dcfce7; color: #166534; }
+.badge-lost { background: #fee2e2; color: #991b1b; }
+.badge-info { background: #e0f2fe; color: #0369a1; }
+
+/* Typographie */
+h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; text-align: center; color: #ffffff; letter-spacing: -0.03em; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.2rem; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+.text-muted { color: #cbd5e1; font-size: 1rem; text-align: center; margin-bottom: 2.5rem; }
+
+/* Tableaux (pour l'admin) */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 1rem 0.5rem; font-size: 0.85rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--border-color); }
+td { padding: 1rem 0.5rem; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; color: var(--text-main); }
+tr:last-child td { border-bottom: none; }
+
+/* Formulaires */
+input, select, textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: white;
+  transition: all 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Correction de la lisibilité dans les cartes (Admin) */
+.card h2, .card h3, .card label {
+  color: #1e293b !important;
+  text-shadow: none !important;
+}
+
+.card table th {
+  color: #64748b !important;
+}
+
+.card table td {
+  color: #1e293b !important;
+}
+
+/* Ajustement de la page Admin spécifiquement */
+.admin-page h1 {
+    color: white;
+    margin-bottom: 1.5rem;
 }
