@@ -96,21 +96,25 @@ export default function Admin() {
     }
   };
 
-  const goToStats = () => {
+  const goToStats = async () => {
     if (selectedIds.length === 0) {
       alert("Veuillez sélectionner au moins un pronostic.");
       return;
     }
-    // On sauvegarde dans le localStorage pour la persistance
-    localStorage.setItem('bt_selected_stats', selectedIds.join(','));
-    navigate('/dashboard');
+    try {
+      // On sauvegarde en base de données
+      await api.post('/stats/save-selection', selectedIds);
+      navigate('/dashboard');
+    } catch (err) {
+      alert("Erreur lors de la sauvegarde de la sélection.");
+    }
   };
 
   return (
     <div className="admin-page">
       <h1>Back-Office</h1>
       
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
         <button 
           onClick={() => setActiveTab('analyses')} 
           className={'btn ' + (activeTab === 'analyses' ? 'btn-primary' : 'btn-outline')}
@@ -170,8 +174,8 @@ export default function Admin() {
                   </div>
                 )}
                 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  <div style={{ flex: 1, minWidth: '200px' }}>
                     <label>Type de pari</label>
                     <select value={form.prediction_type} onChange={e => setForm({...form, prediction_type: e.target.value})}>
                       <option value="1X2">1X2 (Vainqueur)</option>
@@ -179,11 +183,11 @@ export default function Admin() {
                       <option value="BTTS">Les deux équipes marquent</option>
                     </select>
                   </div>
-                  <div style={{ flex: 1 }}>
+                  <div style={{ flex: 1, minWidth: '200px' }}>
                     <label>Pronostic</label>
                     <input type="text" placeholder="ex: PSG" value={form.prediction_value} onChange={e => setForm({...form, prediction_value: e.target.value})} required />
                   </div>
-                  <div style={{ flex: 1 }}>
+                  <div style={{ flex: 1, minWidth: '200px' }}>
                     <label>Cote enregistrée</label>
                     <input type="number" step="0.01" value={form.odds_at_analysis} onChange={e => setForm({...form, odds_at_analysis: e.target.value})} />
                   </div>
@@ -202,14 +206,14 @@ export default function Admin() {
           )}
 
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2>Historique des analyses</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
+              <h2 style={{ margin: 0 }}>Historique des analyses</h2>
               <button onClick={goToStats} className="btn btn-primary">
-                Calculer les stats sur la sélection ({selectedIds.length})
+                Publier la sélection sur le Dashboard ({selectedIds.length})
               </button>
             </div>
             
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
               <table>
                 <thead>
                   <tr style={{ background: '#f8fafc' }}>
@@ -231,7 +235,7 @@ export default function Admin() {
                           style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                         />
                       </td>
-                      <td style={{ fontWeight: 500 }}>{a.match.home_team.name} vs {a.match.away_team.name}</td>
+                      <td style={{ fontWeight: 500, minWidth: '200px' }}>{a.match.home_team.name} vs {a.match.away_team.name}</td>
                       <td>{a.prediction_type} : {a.prediction_value}</td>
                       <td>{a.odds_at_analysis || '-'}</td>
                       <td>
@@ -252,12 +256,12 @@ export default function Admin() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <div className="card" style={{ marginBottom: '2rem' }}>
             <h2>Créer une publicité</h2>
-            <form onSubmit={handleSubmitAd} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
-              <div style={{ flex: 1 }}>
+            <form onSubmit={handleSubmitAd} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: '200px' }}>
                 <label>Titre</label>
                 <input type="text" placeholder="ex: Promo Betclic" value={adForm.title} onChange={e => setAdForm({...adForm, title: e.target.value})} required />
               </div>
-              <div style={{ flex: 2 }}>
+              <div style={{ flex: 2, minWidth: '200px' }}>
                 <label>Texte</label>
                 <input type="text" placeholder="ex: 100€ remboursés !" value={adForm.content} onChange={e => setAdForm({...adForm, content: e.target.value})} required />
               </div>
@@ -270,7 +274,7 @@ export default function Admin() {
           </div>
 
           <h2>Toutes les publicités</h2>
-          <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
             <table>
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
@@ -291,8 +295,8 @@ export default function Admin() {
                         style={{ width: '20px', height: '20px', cursor: 'pointer' }} 
                       />
                     </td>
-                    <td style={{ fontWeight: 600 }}>{ad.title}</td>
-                    <td>{ad.content}</td>
+                    <td style={{ fontWeight: 600, minWidth: '150px' }}>{ad.title}</td>
+                    <td style={{ minWidth: '200px' }}>{ad.content}</td>
                     <td>
                       <span className="badge" style={{ background: ad.color, color: 'white' }}>Couleur</span>
                     </td>

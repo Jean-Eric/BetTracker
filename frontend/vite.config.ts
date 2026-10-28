@@ -3,23 +3,27 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+  },
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'BetTracker',
+        name: 'BetTracker PRO',
         short_name: 'BetTracker',
-        description: "Mon outil d'analyse et de suivi de paris",
-        theme_color: '#1f2937',
-        background_color: '#ffffff',
+        description: "L'outil ultime pour analyser et suivre vos pronostics sportifs.",
+        theme_color: '#0f172a',
+        background_color: '#0f172a',
         display: 'standalone',
+        orientation: 'portrait',
         icons: [
-          {
-            src: '/vite.svg',
-            sizes: '192x192',
-            type: 'image/svg+xml'
-          }
+          { src: 'web-app-manifest-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'web-app-manifest-512x512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'web-app-manifest-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
         ]
       }
     })

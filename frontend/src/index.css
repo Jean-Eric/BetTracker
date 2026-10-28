@@ -239,3 +239,130 @@ label {
     color: white;
     margin-bottom: 1.5rem;
 }
+/* ... (gardez tout le CSS existant) ... */
+
+/* --- RESPONSIVITE MOBILE --- */
+@media (max-width: 768px) {
+  /* Navigation */
+  nav {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1rem !important;
+    gap: 1rem !important;
+  }
+  
+  nav > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+    width: 100%;
+  }
+
+  nav > div > div {
+    flex-wrap: wrap !important;
+    gap: 0.8rem !important;
+  }
+
+  /* Layout principal */
+  .app-container {
+    padding: 1rem 0.5rem 2rem 0.5rem !important;
+  }
+
+  /* Bannière */
+  .hero-banner {
+    padding: 2rem 1rem !important;
+  }
+
+  .hero-banner h1 {
+    font-size: 1.8rem !important;
+  }
+
+  .hero-banner p {
+    font-size: 1rem !important;
+  }
+
+  /* Cartes */
+  .card {
+    padding: 1rem !important;
+    width: 100% !important;
+  }
+
+  /* Titres */
+  h1 { font-size: 1.8rem !important; }
+  h2 { font-size: 1.3rem !important; }
+
+  /* Tableaux : on autorise le scroll horizontal */
+  .card table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+  }
+  
+  /* Ajustement des formulaires */
+  .form-row {
+    flex-direction: column !important;
+  }
+  
+  /* Titres de page */
+  .page-title {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+  }
+}
+/* ... (gardez tout le CSS existant) ... */
+
+/* --- RESPONSIVITE MOBILE --- */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1rem !important;
+    gap: 1rem !important;
+  }
+  
+  nav > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+    width: 100%;
+  }
+
+  nav > div > div {
+    flex-wrap: wrap !important;
+    gap: 0.8rem !important;
+  }
+
+  .app-container {
+    padding: 1rem 0.5rem 2rem 0.5rem !important;
+  }
+
+  .hero-banner {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .hero-banner h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .hero-banner p {
+    font-size: 0.9rem !important;
+  }
+
+  .card {
+    padding: 1rem !important;
+    width: 100% !important;
+  }
+
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.1rem !important; }
+
+  /* Tableaux : on autorise le scroll horizontal si vraiment nécessaire */
+  .card table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+  }
+}
