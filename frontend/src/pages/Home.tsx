@@ -4,8 +4,10 @@ import { api } from '../api/client';
 export default function Home() {
   const [analyses, setAnalyses] = useState<any[]>([]);
   const [ads, setAds] = useState<any[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
+  // Fonction pour charger les données
+  const loadData = () => {
     api.get('/analyses/').then(res => {
       const today = new Date().toLocaleDateString('fr-FR');
       const todayAnalyses = res.data.filter((a: any) => {
@@ -16,6 +18,18 @@ export default function Home() {
     });
     
     api.get('/ads/').then(res => setAds(res.data.filter((a: any) => a.is_active)));
+  };
+
+  useEffect(() => {
+    loadData();
+    
+    // Rafraîchissement automatique toutes les 60 secondes
+    const interval = setInterval(() => {
+      setRefreshKey(old => old + 1);
+      loadData();
+    }, 60000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -49,9 +63,28 @@ export default function Home() {
                 </span>
               </div>
               
-              <h3 style={{ fontSize: '1.2rem', marginBottom: '1.2rem', textAlign: 'center', fontWeight: 800, color: '#1e293b' }}>
+              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', textAlign: 'center', fontWeight: 800, color: '#1e293b' }}>
                 {a.match.home_team.name} <span style={{ color: '#94a3b8', margin: '0 0.5rem', fontSize: '1rem', fontWeight: 500 }}>vs</span> {a.match.away_team.name}
               </h3>
+
+              {/* NOUVEAU : Affichage du score et du temps de jeu si le match est en cours ou terminé */}
+              {a.match.status !== 'NS' && (
+                <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                  <div style={{ display: 'inline-block', background: '#f1f5f9', padding: '0.4rem 1rem', borderRadius: '8px' }}>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b' }}>
+                      {a.match.home_goals} - {a.match.away_goals}
+                    </span>
+                    {['1H', '2H', 'HT', 'ET', 'LIVE'].includes(a.match.status) && a.match.elapsed !== null && (
+                      <span style={{ fontSize: '0.9rem', color: '#ef4444', fontWeight: 'bold', marginLeft: '0.8rem' }}>
+                        {a.match.elapsed}'
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.3rem', fontWeight: 600 }}>
+                    {a.match.status === 'FT' ? 'Match terminé' : 'Match en cours'}
+                  </div>
+                </div>
+              )}
               
               <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.2rem', flexWrap: 'wrap' }}>
                 <span className="badge badge-info">{a.prediction_type} : {a.prediction_value}</span>
